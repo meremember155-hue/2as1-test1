@@ -155,36 +155,34 @@
   });
 
   // طلب إذن الإشعارات
-  if('Notification' in window){
-    Notification.requestPermission().then(permission => {
-      if(permission === 'granted'){
-        new Notification('مرحباً! 📝', {
-          body: 'يمكنك متابعة مهامك اليوم.',
-        });
-      }
-    });
-  }
+  // طلب إذن الإشعارات فقط
+if('Notification' in window){
+  Notification.requestPermission();
+}
 
-  // إشعار يومي الساعة 6 مساءً
-  function dailyNotification() {
-    const now = new Date();
-    const target = new Date();
-    target.setHours(18,0,0,0);
-    let timeout = target - now;
-    if(timeout < 0) timeout += 24*60*60*1000; // الغد
-    setTimeout(() => {
-      if(Notification.permission === 'granted'){
-        new Notification('📌 مهام جديدة', { body: 'توجد مهام جديدة اليوم!' });
-      }
-      setInterval(() => {
-        if(Notification.permission === 'granted'){
-          new Notification('📌 مهام جديدة', { body: 'توجد مهام جديدة اليوم!' });
-        }
-      }, 24*60*60*1000);
-    }, timeout);
+// وظيفة إرسال الإشعار
+function sendNotification() {
+  if(Notification.permission === 'granted'){
+    new Notification('📌 مهام جديدة', { body: 'توجد مهام جديدة اليوم!' });
   }
-  dailyNotification();
+}
+
+// إشعار يومي الساعة 6 مساءً
+function dailyNotification() {
+  const now = new Date();
+  const target = new Date();
+  target.setHours(18,0,0,0); // الساعة 6 مساءً
+  let timeout = target - now;
+  if(timeout < 0) timeout += 24*60*60*1000; // الغد
+  setTimeout(() => {
+    sendNotification(); // يظهر أول إشعار الساعة 6
+    setInterval(sendNotification, 24*60*60*1000); // كل 24 ساعة بعد ذلك
+  }, timeout);
+}
+dailyNotification();
+
 </script>
 
 </body>
 </html>
+
