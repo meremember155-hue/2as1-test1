@@ -7,14 +7,14 @@
 <style>
   body {
     font-family: 'Tajawal', sans-serif;
-    background-color: white;
-    color: #333;
+    background-color: #fff;
     margin: 0;
     padding: 0;
+    color: #333;
   }
 
   header {
-    background-color: #ff8c00;
+    background-color: #ff7f50;
     color: white;
     text-align: center;
     padding: 15px 0;
@@ -27,11 +27,11 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: white;
+    background-color: #ffd1b3;
     padding: 8px 0;
   }
   .header-extra button {
-    background-color: #ff8c00;
+    background-color: #ff7f50;
     color: white;
     border: none;
     padding: 5px 12px;
@@ -47,22 +47,27 @@
   }
 
   .task {
-    background-color: #ff8c00;
-    border-radius: 10px;
-    padding: 15px;
+    background-color: #ffe5d9;
+    border-radius: 12px;
+    padding: 15px 15px 20px 15px;
     margin-bottom: 15px;
     position: relative;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .task:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  }
+
   .task h2 {
     margin-bottom: 5px;
     font-size: 1.2em;
   }
   .task p {
     margin-bottom: 5px;
-    color: #555;
     font-size: 0.9em;
+    color: #555;
   }
   .task .date {
     font-size: 0.8em;
@@ -74,7 +79,7 @@
     color: white;
     border: none;
     padding: 8px 12px;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.9em;
   }
@@ -82,130 +87,41 @@
     position: absolute;
     top: 15px;
     left: 15px;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
-  }
-
-  /* نافذة السجل */
-  #log {
-    display: none;
-    max-width: 400px;
-    margin: 10px auto;
-    background-color: #fff3e0;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-  }
-  #log h3 {
-    text-align: center;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-  }
-  #log ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  #log li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ffd1b3;
-    font-size: 0.9em;
   }
 </style>
 </head>
 <body>
 
-<header>مهامي</header>
+<header>📝 مهامي</header>
 
 <div class="header-extra">
-  <button id="showLogBtn">سجل</button>
-  <button onclick="location.reload()">تحديث الصفحة</button>
+  <button onclick="window.location.href='log.html'">📜 سجل</button>
+  <button onclick="location.reload()">🔄 تحديث الصفحة</button>
 </div>
 
 <div class="tasks">
   <div class="task" data-id="1">
     <input type="checkbox">
-    <h2>الرياضيات</h2>
-    <p>حل سلسلة</p></p>
+    <h2>📌 المهمة 1</h2>
+    <p>وصف خفيف للمهمة الأولى.</p>
     <div class="date">تاريخ: 2025/11/21</div>
-    <button onclick="downloadFile('file1.txt')">حل المهمة</button>
+    <button onclick="downloadFile('file1.txt')">💾 حل المهمة</button>
   </div>
 
   <div class="task" data-id="2">
     <input type="checkbox">
-    <h2>المهمة 2</h2>
+    <h2>📌 المهمة 2</h2>
     <p>وصف خفيف للمهمة الثانية.</p>
     <div class="date">تاريخ: 2025/11/21</div>
-    <button onclick="downloadFile('file2.txt')">حل المهمة</button>
+    <button onclick="downloadFile('file2.txt')">💾 حل المهمة</button>
   </div>
-</div>
-<div class="task" data-id="2">
-    <input type="checkbox">
-    <h2>اللغة العربية </h2>
-    <p>وصف خفيف للمهمة الثانية.</p>
-    <div class="date">تاريخ: 2025/11/21</div>
-    <button onclick="downloadFile('file2.txt')">حل المهمة</button>
-  </div>
-</div>
-<!-- نافذة السجل -->
-<div id="log">
-  <h3>المهام المنجزة</h3>
-  <ul id="logList"></ul>
 </div>
 
 <script>
   const tasks = document.querySelectorAll('.task');
-  const logList = document.getElementById('logList');
-  const showLogBtn = document.getElementById('showLogBtn');
-  const logDiv = document.getElementById('log');
-
-  function updateLog() {
-    logList.innerHTML = '';
-    for(let i = 0; i < localStorage.length; i++){
-      const key = localStorage.key(i);
-      if(key.startsWith('task_')){
-        const taskTitle = JSON.parse(localStorage.getItem(key)).title;
-        const li = document.createElement('li');
-        li.textContent = taskTitle;
-        logList.appendChild(li);
-      }
-    }
-  }
-
-  showLogBtn.addEventListener('click', () => {
-    if(logDiv.style.display === 'none'){
-      updateLog();
-      logDiv.style.display = 'block';
-    } else {
-      logDiv.style.display = 'none';
-    }
-  });
-
-  // حفظ حالة المهمة وإخفاءها عند إنهاء المهمة
-  tasks.forEach(task => {
-    const checkbox = task.querySelector('input[type="checkbox"]');
-    const taskId = task.dataset.id;
-    const title = task.querySelector('h2').textContent;
-
-    // استعادة الحالة عند تحميل الصفحة
-    const saved = localStorage.getItem('task_' + taskId);
-    if(saved){
-      task.style.display = 'none';
-    }
-
-    checkbox.addEventListener('change', () => {
-      if(checkbox.checked){
-        localStorage.setItem('task_' + taskId, JSON.stringify({ title: title }));
-        task.style.display = 'none';
-        updateLog();
-      } else {
-        localStorage.removeItem('task_' + taskId);
-        task.style.display = 'block';
-        updateLog();
-      }
-    });
-  });
 
   function downloadFile(filename) {
     const element = document.createElement('a');
@@ -218,8 +134,57 @@
     document.body.removeChild(element);
   }
 
+  // حفظ المهام المنجزة وإخفاؤها
+  tasks.forEach(task => {
+    const checkbox = task.querySelector('input[type="checkbox"]');
+    const taskId = task.dataset.id;
+    const title = task.querySelector('h2').textContent;
+
+    const saved = localStorage.getItem('task_' + taskId);
+    if(saved) task.style.display = 'none';
+
+    checkbox.addEventListener('change', () => {
+      if(checkbox.checked){
+        localStorage.setItem('task_' + taskId, JSON.stringify({ title: title }));
+        task.style.display = 'none';
+      } else {
+        localStorage.removeItem('task_' + taskId);
+        task.style.display = 'block';
+      }
+    });
+  });
+
+  // طلب إذن الإشعارات
+  if('Notification' in window){
+    Notification.requestPermission().then(permission => {
+      if(permission === 'granted'){
+        new Notification('مرحباً! 📝', {
+          body: 'يمكنك متابعة مهامك اليوم.',
+        });
+      }
+    });
+  }
+
+  // إشعار يومي الساعة 6 مساءً
+  function dailyNotification() {
+    const now = new Date();
+    const target = new Date();
+    target.setHours(18,0,0,0);
+    let timeout = target - now;
+    if(timeout < 0) timeout += 24*60*60*1000; // الغد
+    setTimeout(() => {
+      if(Notification.permission === 'granted'){
+        new Notification('📌 مهام جديدة', { body: 'توجد مهام جديدة اليوم!' });
+      }
+      setInterval(() => {
+        if(Notification.permission === 'granted'){
+          new Notification('📌 مهام جديدة', { body: 'توجد مهام جديدة اليوم!' });
+        }
+      }, 24*60*60*1000);
+    }, timeout);
+  }
+  dailyNotification();
 </script>
+
 </body>
 </html>
-
-
