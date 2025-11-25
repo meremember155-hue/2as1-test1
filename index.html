@@ -118,29 +118,34 @@
     <div class="date">تاريخ: 2025/11/21</div>
     <button onclick="downloadFile('file2.txt')">💾 حل المهمة</button>
   </div>
- <div class="task" data-id="3">
+  <div class="task" data-id="3">
     <input type="checkbox">
     <h2>📌 فيزياء</h2>
-    <p>مثال 01 الكيمياء</p>
-    <div class="date">تاريخ: 2025/11/26</div>
-    <button onclick="downloadFile('file1.txt')">💾 حل المهمة</button>
+    <p> تمرين 9.10.11 ص 282,تمرين12.13ص283</p>
+    <div class="date">تاريخ: 2025/11/30</div>
+    <button onclick="downloadFile('ي.pdf')">💾 حل المهمة</button>
   </div>
-</div>  
+  <div class="task" data-id="4">
+    <input type="checkbox">
+    <h2>📌 فيزياء</h2>
+    <p> حل مثال الأول في الكيمياء</p>
+    <div class="date">تاريخ المراقبة: 2025/11/26 </div>
+    <button onclick="downloadFile('f.pdf')">💾 حل المهمة</button>
+  </div>
+</div>
+  
 
 <script>
   const tasks = document.querySelectorAll('.task');
-
-  function downloadFile(filename) {
-    const element = document.createElement('a');
-    const fileContent = "هذا محتوى " + filename;
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-    element.href = URL.createObjectURL(blob);
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }
-
+  
+function downloadFile(filename) {
+  const link = document.createElement('a');
+  link.href = filename;       // تحميل الملف الحقيقي
+  link.download = filename;   // يجبر المتصفح على تحميله
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
   // حفظ المهام المنجزة وإخفاؤها
   tasks.forEach(task => {
     const checkbox = task.querySelector('input[type="checkbox"]');
@@ -192,6 +197,11 @@ dailyNotification();
 
 </body>
 </html>
+
+
+
+
+
 
 
 
